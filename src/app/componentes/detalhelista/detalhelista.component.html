@@ -1,13 +1,13 @@
 <div class="container">
     <div  class="row">
         <div class="col-12 text-center">
-            <h3> Detalhe Lista</h3>
+            <h3> {{ listaCompras.nomeMercado }} </h3>
         </div>
     </div>
 
     <div class="row titulo">
         <div class="col-12">
-            Data da compra:    Valor Total R$
+            Data da compra: {{ listaCompras.data }}    Valor Total R$ {{ listaCompras.valorTotal }}
         </div>
     </div>
     <div class="row mt-2">
@@ -17,6 +17,22 @@
     </div>
 
     <!-- Repetição dos itens da lista -->
+    <div class="row" *ngFor="let ITEM of listaCompras.itens">
+      <div class="row">
+        <div class="col-7">
+        {{ ITEM.produto.nome }}
+       </div>
+       <div class="col-2">
+         {{ITEM.quantidade}}
+       </div>
+       <div class="col-2">
+        {{ITEM.precototal | currency:'BRL' }}
+       </div>
+       <div class="col-1">
+        <input type="checkbox" class="form-check">
+       </div>
+      </div>
+    </div>
 </div>
 
 <!-- modal para novo produto da lista-->
@@ -35,10 +51,12 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+
+          
          <!-- formulario do produto e item/quantidade opcionais -->
-          <label for="selectProduto">Selecione o Produto</label>
+          <label for="selectProdut o">Selecione o Produto</label>
           <select class="form-select" [(ngModel)]="novoItem.produto">
-            <option *ngFor="let PROD of listaProdutos" [value]=[PROD.id]>
+            <option *ngFor="let PROD of listaProdutos" [ngValue]="PROD">
                 {{PROD.nome}} 
             </option>
           </select>
@@ -47,14 +65,14 @@
           <p>Não encontrou? <button class="btn btn-primary" (click)="habilitarNovoProduto()">Adicionar Produto</button></p>
           <div *ngIf="formNovoProduto">
                 <label for="txtNovoProduto">Nome</label>
-                <input type="text" class="form-control" [(ngModel)]="novoProduto.nome"> <button class="btn btn-primary" (click)="cadastrarNovoProduto()">Ok</button>
+                <input type="text" id="txtNome" class="form-control" [(ngModel)]="novoProduto.nome"> <button class="btn btn-primary" (click)="cadastrarNovoProduto()">Ok</button>
           </div>
 
           
           <label for="txtQuantidade">Quantidade (Opcional)</label>
           <input type="number" id="txtQuantidade" class="form-control" [(ngModel)]="novoItem.quantidade">
           <label for="txtPreco">Preço a ser pago (Opcional)</label>
-          <input type="number" id="txtPreco" class="form-control" [(ngModel)]="novoItem.precoTotal">
+          <input type="number" id="txtPreco" class="form-control" [(ngModel)]="novoItem.precototal">
 
         </div> 
         <div class="modal-footer">
@@ -64,3 +82,5 @@
       </div>
     </div>
   </div>
+
+  

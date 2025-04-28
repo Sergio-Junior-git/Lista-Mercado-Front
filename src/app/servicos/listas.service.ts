@@ -21,4 +21,8 @@ export class ListasService {
   public cadastrarLista(lista:Lista): Observable<Lista>{
     return this.http.post<Lista>(this.API+"/listas", lista)
   }
+
+  public recuperarPorId(id: number): Observable<Lista>{
+    return this.http.get<Lista>(this.API+"/listas/"+id)
+  }
 }

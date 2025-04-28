@@ -72,6 +72,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+           "host": "0.0.0.0",
+           "allowedHosts": ["2c41-45-183-152-237.ngrok-free.app"]
+           },
           "configurations": {
             "production": {
               "buildTarget": "listacompras:build:production"

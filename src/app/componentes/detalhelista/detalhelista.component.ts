@@ -4,6 +4,8 @@ import { ProdutosService } from '../../servicos/produtos.service';
 import { itemlista } from '../../model/itemlista';
 import { ActivatedRoute } from '@angular/router';
 import { ItenslistaService } from '../../servicos/itenslista.service';
+import { Lista } from '../../model/Lista';
+import { ListasService } from '../../servicos/listas.service';
 
 
 @Component({
@@ -18,8 +20,10 @@ export class DetalhelistaComponent implements OnInit {
   public novoProduto: Produto;
   public novoItem: itemlista;
   public formNovoProduto: boolean = false;
-  public idLista: number = 0;
-  constructor(private produtosService: ProdutosService, private activatedRoute: ActivatedRoute, private itemlistaSrv: ItenslistaService) {
+  public idLista:  number;
+  public listaCompras: Lista = new Lista();
+
+  constructor(private produtosService: ProdutosService, private activatedRoute: ActivatedRoute, private itemlistaSrv: ItenslistaService, private listaService: ListasService) {
     this.novoProduto = new Produto();
     this.novoItem = new itemlista();
     this.idLista = this.activatedRoute.snapshot.params['id'];
@@ -27,6 +31,18 @@ export class DetalhelistaComponent implements OnInit {
 
   ngOnInit(): void {
       this.recuperarTodosOsProdutos();
+      this.recuperarDetalhesDaLista(this.idLista);
+  }
+
+  public recuperarDetalhesDaLista(idLista: number){
+    this.listaService.recuperarPorId(this.idLista).subscribe(
+      (res: Lista) => {
+        this.listaCompras = res;
+      },
+      (err) => {
+        alert("Não foi possivel recuperar os itens da lista!");
+      }
+    )
   }
 
   public recuperarTodosOsProdutos(){
@@ -68,5 +84,14 @@ export class DetalhelistaComponent implements OnInit {
   public adicionarItemLista(){
     this.novoItem.lista.id = this.idLista;
     console.log(this.novoItem);
+    this.itemlistaSrv.adicionarNovoItem(this.novoItem).subscribe(
+      (res: itemlista)=>{
+        alert("Novo item adicionado com sucesso!")
+        this.recuperarDetalhesDaLista(this.idLista);
+      },
+      (err) =>{
+        alert("Não consegui adicionar novo item")
+      }
+    )
   }
 }
